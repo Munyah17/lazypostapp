@@ -1,6 +1,29 @@
 import type { Metadata, Viewport } from 'next'
+import { Space_Grotesk, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google'
 import './globals.css'
 import { Toaster } from 'sonner'
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-display',
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
+})
+
+const ibmPlexSans = IBM_Plex_Sans({
+  subsets: ['latin'],
+  variable: '--font-body',
+  weight: ['300', '400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+})
+
+const ibmPlexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+  weight: ['300', '400', '500', '600'],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: { default: 'LazyPost — Smart Twitter Automation', template: '%s | LazyPost' },
@@ -23,20 +46,24 @@ export const metadata: Metadata = {
     creator: '@lazypost',
   },
   robots: { index: true, follow: true },
-  manifest: '/manifest.json',
 }
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
+  maximumScale: 5,
   themeColor: '#080a0f',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="h-full" suppressHydrationWarning>
-      <body className="min-h-full bg-[#080a0f] text-[#f0f4f8] antialiased">
+    <html
+      lang="en"
+      data-scroll-behavior="smooth"
+      className={`h-full ${spaceGrotesk.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="min-h-full bg-[#080a0f] text-[#f0f4f8] antialiased font-body">
         {children}
         <Toaster
           position="bottom-right"
@@ -46,7 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               background: '#13181f',
               border: '1px solid #1e2a3a',
               color: '#f0f4f8',
-              fontFamily: 'IBM Plex Sans, sans-serif',
+              fontFamily: 'var(--font-body)',
             },
           }}
         />

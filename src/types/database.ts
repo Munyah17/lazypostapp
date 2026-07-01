@@ -198,19 +198,58 @@ export interface ViralVideoQueue {
   updated_at: string
 }
 
+export interface EngagementActivity {
+  id: string
+  user_id: string
+  twitter_account_id: string
+  action_type: 'like' | 'retweet' | 'reply'
+  target_tweet_id: string | null
+  target_user_id: string | null
+  content: string | null
+  performed_at: string
+}
+
+export interface PostAnalytics {
+  id: string
+  post_id: string
+  user_id: string
+  recorded_at: string
+  likes: number
+  retweets: number
+  replies: number
+  impressions: number
+  bookmarks: number
+  quote_tweets: number
+  engagement_rate: number
+}
+
+export interface Invitation {
+  id: string
+  email: string
+  invited_by: string
+  role: UserRole
+  token: string
+  expires_at: string
+  accepted_at: string | null
+  created_at: string
+}
+
 export interface Database {
   public: {
     Tables: {
-      plans: { Row: Plan; Insert: Partial<Plan>; Update: Partial<Plan>; Relationships: [] }
-      profiles: { Row: Profile; Insert: Partial<Profile>; Update: Partial<Profile>; Relationships: [] }
-      subscriptions: { Row: Subscription; Insert: Partial<Subscription>; Update: Partial<Subscription>; Relationships: [] }
-      twitter_accounts: { Row: TwitterAccount; Insert: Partial<TwitterAccount>; Update: Partial<TwitterAccount>; Relationships: [] }
-      posts: { Row: Post; Insert: Partial<Post>; Update: Partial<Post>; Relationships: [] }
-      engagement_rules: { Row: EngagementRule; Insert: Partial<EngagementRule>; Update: Partial<EngagementRule>; Relationships: [] }
-      analytics_snapshots: { Row: AnalyticsSnapshot; Insert: Partial<AnalyticsSnapshot>; Update: Partial<AnalyticsSnapshot>; Relationships: [] }
-      payment_transactions: { Row: PaymentTransaction; Insert: Partial<PaymentTransaction>; Update: Partial<PaymentTransaction>; Relationships: [] }
-      user_settings: { Row: UserSettings; Insert: Partial<UserSettings>; Update: Partial<UserSettings>; Relationships: [] }
-      viral_video_queue: { Row: ViralVideoQueue; Insert: Partial<ViralVideoQueue>; Update: Partial<ViralVideoQueue>; Relationships: [] }
+      plans:                { Row: Plan;                Insert: Partial<Plan>;                Update: Partial<Plan>;                Relationships: [] }
+      profiles:             { Row: Profile;             Insert: Partial<Profile>;             Update: Partial<Profile>;             Relationships: [] }
+      subscriptions:        { Row: Subscription;        Insert: Partial<Subscription>;        Update: Partial<Subscription>;        Relationships: [] }
+      twitter_accounts:     { Row: TwitterAccount;      Insert: Partial<TwitterAccount>;      Update: Partial<TwitterAccount>;      Relationships: [] }
+      posts:                { Row: Post;                Insert: Partial<Post>;                Update: Partial<Post>;                Relationships: [] }
+      engagement_rules:     { Row: EngagementRule;      Insert: Partial<EngagementRule>;      Update: Partial<EngagementRule>;      Relationships: [] }
+      engagement_activity:  { Row: EngagementActivity;  Insert: Partial<EngagementActivity>;  Update: Partial<EngagementActivity>;  Relationships: [] }
+      analytics_snapshots:  { Row: AnalyticsSnapshot;   Insert: Partial<AnalyticsSnapshot>;   Update: Partial<AnalyticsSnapshot>;   Relationships: [] }
+      post_analytics:       { Row: PostAnalytics;       Insert: Partial<PostAnalytics>;       Update: Partial<PostAnalytics>;       Relationships: [] }
+      payment_transactions: { Row: PaymentTransaction;  Insert: Partial<PaymentTransaction>;  Update: Partial<PaymentTransaction>;  Relationships: [] }
+      user_settings:        { Row: UserSettings;        Insert: Partial<UserSettings>;        Update: Partial<UserSettings>;        Relationships: [] }
+      viral_video_queue:    { Row: ViralVideoQueue;     Insert: Partial<ViralVideoQueue>;     Update: Partial<ViralVideoQueue>;     Relationships: [] }
+      invitations:          { Row: Invitation;          Insert: Partial<Invitation>;          Update: Partial<Invitation>;          Relationships: [] }
     }
     Views: { [_ in never]: never }
     Functions: { [_ in never]: never }
