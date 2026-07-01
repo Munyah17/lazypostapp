@@ -1,6 +1,10 @@
 import Replicate from 'replicate'
 
-const replicate = new Replicate({ auth: process.env.REPLICATE_API_TOKEN })
+let _replicate: Replicate | null = null
+function getReplicate() {
+  if (!_replicate) _replicate = new Replicate({ auth: process.env.REPLICATE_API_TOKEN })
+  return _replicate
+}
 
 export interface VideoGenerationOptions {
   prompt: string
@@ -18,7 +22,7 @@ export async function generateViralVideo(options: VideoGenerationOptions): Promi
 
   const enhancedPrompt = `${prompt}, ${style} style, high quality, viral social media video, trending aesthetic, sharp visuals`
 
-  const output = await replicate.run(
+  const output = await getReplicate().run(
     'wan-ai/wan2.1-t2v-480p:a9f94e6a22a71b00a1038e64f65e59f7dfb5e5b2c7bf23e09c4a5b4e30fc30f9',
     {
       input: {
@@ -44,7 +48,7 @@ export async function generateVideoFromImages(
   const imageUrls: string[] = []
 
   for (const prompt of imagePrompts.slice(0, 3)) {
-    const output = await replicate.run(
+    const output = await getReplicate().run(
       'black-forest-labs/flux-schnell',
       {
         input: {

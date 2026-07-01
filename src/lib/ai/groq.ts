@@ -1,6 +1,10 @@
 import Groq from 'groq-sdk'
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+let _groq: Groq | null = null
+function getGroq() {
+  if (!_groq) _groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+  return _groq
+}
 
 export interface GeneratePostOptions {
   topic: string
@@ -52,7 +56,7 @@ Rules:
     : `Create an engaging single tweet about: "${topic}".
        Return JSON: { "content": "tweet_text", "hashtags": ${hashtags ? '["tag1","tag2"]' : '[]'}, "tips": ["improvement_tip"] }`
 
-  const completion = await groq.chat.completions.create({
+  const completion = await getGroq().chat.completions.create({
     model: 'llama-3.3-70b-versatile',
     messages: [
       { role: 'system', content: systemPrompt },
@@ -81,7 +85,7 @@ export async function analyzeViralPotential(content: string): Promise<{
   improvements: string[]
   bestPostingTime: string
 }> {
-  const completion = await groq.chat.completions.create({
+  const completion = await getGroq().chat.completions.create({
     model: 'llama-3.3-70b-versatile',
     messages: [
       {
@@ -116,7 +120,7 @@ export async function generateEngagementReply(
   tweetAuthor: string,
   tone: string = 'friendly'
 ): Promise<string> {
-  const completion = await groq.chat.completions.create({
+  const completion = await getGroq().chat.completions.create({
     model: 'llama-3.1-8b-instant',
     messages: [
       {
@@ -141,7 +145,7 @@ export async function generateVideoScript(
   topic: string,
   duration: number = 15
 ): Promise<{ script: string; imagePrompts: string[]; style: string }> {
-  const completion = await groq.chat.completions.create({
+  const completion = await getGroq().chat.completions.create({
     model: 'llama-3.3-70b-versatile',
     messages: [
       {
