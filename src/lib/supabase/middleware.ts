@@ -21,15 +21,19 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  // getSession reads the cookie — no network round-trip.
+  // getUser() (network call) is reserved for server components and API routes
+  // where the security check actually matters.
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user ?? null
 
   const pathname = request.nextUrl.pathname
 
-  const protectedRoutes = ['/dashboard', '/admin', '/superadmin']
-  const authRoutes = ['/login', '/signup']
+  const protectedPrefixes = ['/dashboard', '/admin', '/superadmin']
+  const authPrefixes     = ['/login', '/signup']
 
-  const isProtected = protectedRoutes.some((route) => pathname.startsWith(route))
-  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route))
+  const isProtected = protectedPrefixes.some(p => pathname.startsWith(p))
+  const isAuthRoute  = authPrefixes.some(p => pathname.startsWith(p))
 
   if (!user && isProtected) {
     const url = request.nextUrl.clone()

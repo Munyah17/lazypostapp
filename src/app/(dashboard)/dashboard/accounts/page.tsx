@@ -66,9 +66,27 @@ export default async function AccountsPage({
       )}
 
       {params.error && (
-        <div className="flex items-center gap-3 p-4 rounded-2xl border border-red-500/30 bg-red-900/10">
-          <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />
-          <p className="text-sm text-red-300">Failed to connect: {params.error.replace(/_/g, ' ')}</p>
+        <div className="p-4 rounded-2xl border border-red-500/30 bg-red-900/10 space-y-1">
+          <div className="flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />
+            <p className="text-sm font-semibold text-red-300">
+              {params.error === 'invalid_credentials' && 'Twitter API credentials are invalid (401)'}
+              {params.error === 'oauth1_not_enabled' && 'OAuth 1.0a is not enabled on your Twitter app'}
+              {params.error === 'callback_not_registered' && 'Callback URL not registered in Twitter Developer Portal'}
+              {params.error === 'network_error' && 'Could not reach Twitter API — check your connection'}
+              {!['invalid_credentials','oauth1_not_enabled','callback_not_registered','network_error'].includes(params.error) && `Connection failed: ${params.error.replace(/_/g, ' ')}`}
+            </p>
+          </div>
+          {params.error === 'invalid_credentials' && (
+            <p className="text-xs text-red-400/80 ml-8">
+              In Twitter Developer Portal → your app → User authentication settings: enable OAuth 1.0a, set permissions to Read+Write, and add the callback URL <code className="font-mono bg-red-900/30 px-1 rounded">http://localhost:4000/api/twitter/callback</code>
+            </p>
+          )}
+          {params.error === 'oauth1_not_enabled' && (
+            <p className="text-xs text-red-400/80 ml-8">
+              Go to developer.twitter.com → your app → User authentication settings → enable OAuth 1.0a with Read+Write access.
+            </p>
+          )}
         </div>
       )}
 
